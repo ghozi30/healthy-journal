@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nurture - Healthy Journal & Wellness Tracker</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js for lightweight UI interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Outfit for eye-catching modern headings & Plus Jakarta Sans for crisp body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Outfit"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        tealbrand: {
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                        }
+                    },
+                    animation: {
+                        'float-slow': 'floatSlow 8s ease-in-out infinite',
+                        'float-reverse': 'floatReverse 9s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 5s ease-in-out infinite',
+                        'subtle-bob': 'subtleBob 3s ease-in-out infinite',
+                        'shimmer': 'shimmer 3.5s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fafbfb;
+            color: #1e293b;
+        }
+
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        /* Ambient floating keyframes */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-16px) rotate(3deg); }
+        }
+
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(16px) rotate(-3deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.35; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        @keyframes subtleBob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Glassmorphism effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at 50% -10%, rgba(16, 185, 129, 0.16) 0%, rgba(20, 184, 166, 0.06) 45%, transparent 80%);
+        }
+
+        .custom-shadow {
+            box-shadow: 0 20px 40px -15px rgba(5, 150, 105, 0.08);
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 35px rgba(16, 185, 129, 0.35);
+        }
+
+        /* Modern button shimmer sweep */
+        .btn-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-shimmer::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                60deg,
+                transparent 35%,
+                rgba(255, 255, 255, 0.28) 50%,
+                transparent 65%
+            );
+            transform: rotate(25deg);
+            animation: shimmer 4s infinite;
+            pointer-events: none;
+        }
+
+        /* Smooth interactive card hover */
+        .card-interactive {
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .card-interactive:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px -12px rgba(5, 150, 105, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+            border-color: rgba(16, 185, 129, 0.35);
+        }
+
+        /* Staggered entrance helper */
+        .fade-in-entry {
+            animation: fadeInUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        .fade-delay-1 { animation-delay: 0.12s; }
+        .fade-delay-2 { animation-delay: 0.24s; }
+        .fade-delay-3 { animation-delay: 0.36s; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body x-data="appData()" class="antialiased selection:bg-brand-500 selection:text-white">
+
+    <header class="sticky top-0 z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-600 via-brand-500 to-tealbrand-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/25 group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
+                    <i class="fa-solid fa-book-journal-whills text-lg"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-display font-extrabold text-2xl tracking-tight text-slate-800 group-hover:text-brand-700 transition-colors">Nurture<span class="text-brand-500">.</span></span>
+                    <span class="text-[10px] text-slate-400 font-semibold tracking-widest -mt-1 uppercase">Healthy Journal</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <a href="#fitur" class="hover:text-brand-600 transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 hover:after:w-full after:transition-all">Fitur Utama</a>
+                <a href="#demo" class="hover:text-brand-600 transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 hover:after:w-full after:transition-all">Coba Journal Demo</a>
+                <a href="#kalkulator" class="hover:text-brand-600 transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 hover:after:w-full after:transition-all">Cek Kesejahteraan</a>
+                <a href="#harga" class="hover:text-brand-600 transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 hover:after:w-full after:transition-all">Harga Paket</a>
+                <a href="#faq" class="hover:text-brand-600 transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 hover:after:w-full after:transition-all">FAQ</a>
+            </nav>
+
+            <!-- CTA Buttons -->
+            <div class="hidden md:flex items-center gap-3">
+                <button @click="openAuthModal('login')" class="px-4 py-2.5 text-sm font-semibold text-slate-700 hover:text-brand-600 transition-colors rounded-xl hover:bg-slate-50">
+                    Masuk
+                </button>
+                <button @click="openAuthModal('register')" class="btn-shimmer px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-brand-600 via-brand-500 to-tealbrand-500 rounded-xl shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all">
+                    Mulai Gratis
+                </button>
+            </div>
+
+            <!-- Mobile Hamburger Menu Button -->
+            <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 focus:outline-none">
+                <i class="fa-solid text-xl" :class="mobileMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="md:hidden border-b border-slate-200 bg-white/95 px-4 pt-2 pb-6 space-y-3 shadow-xl backdrop-blur-md">
+            <a href="#fitur" @click="mobileMenuOpen = false" class="block py-2 text-slate-600 font-semibold hover:text-brand-600">Fitur Utama</a>
+            <a href="#demo" @click="mobileMenuOpen = false" class="block py-2 text-slate-600 font-semibold hover:text-brand-600">Coba Journal Demo</a>
+            <a href="#kalkulator" @click="mobileMenuOpen = false" class="block py-2 text-slate-600 font-semibold hover:text-brand-600">Cek Kesejahteraan</a>
+            <a href="#harga" @click="mobileMenuOpen = false" class="block py-2 text-slate-600 font-semibold hover:text-brand-600">Harga Paket</a>
+            <a href="#faq" @click="mobileMenuOpen = false" class="block py-2 text-slate-600 font-semibold hover:text-brand-600">FAQ</a>
+            <div class="pt-4 border-t border-slate-100 flex flex-col gap-2">
+                <button @click="openAuthModal('login'); mobileMenuOpen = false;" class="w-full py-2.5 text-center font-bold text-slate-700 bg-slate-100 rounded-xl">
+                    Masuk
+                </button>
+                <button @click="openAuthModal('register'); mobileMenuOpen = false;" class="btn-shimmer w-full py-2.5 text-center font-bold text-white bg-gradient-to-r from-brand-600 to-tealbrand-500 rounded-xl shadow-md">
+                    Mulai Gratis
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative pt-12 pb-20 md:pt-24 md:pb-32 hero-gradient overflow-hidden">
+        <!-- Modern Ambient Floating Gradient Orbs -->
+        <div class="absolute top-10 -left-20 w-80 h-80 sm:w-96 sm:h-96 rounded-full bg-brand-400/20 blur-3xl pointer-events-none animate-float-slow"></div>
+        <div class="absolute top-28 -right-20 w-80 h-80 sm:w-96 sm:h-96 rounded-full bg-tealbrand-400/20 blur-3xl pointer-events-none animate-float-reverse"></div>
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 w-72 h-72 rounded-full bg-emerald-300/15 blur-2xl pointer-events-none animate-pulse-glow"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto">
+                <!-- Badge with pulsing indicator -->
+                <div class="fade-in-entry inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50/90 border border-brand-200/80 text-brand-700 text-xs font-semibold mb-6 shadow-sm hover:scale-105 transition-transform cursor-default">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-500 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                    </span>
+                    Jurnal Kesehatan &amp; Kebiasaan Berbasis AI #1
+                </div>
+
+                <!-- Main Headline with Outfit Display Typography -->
+                <h1 class="fade-in-entry fade-delay-1 font-display font-black text-4xl sm:text-5xl lg:text-6xl text-slate-900 tracking-tight leading-[1.15] mb-6">
+                    Pahami Tubuh &amp; Pikiranmu Lewat <span class="bg-gradient-to-r from-brand-600 via-tealbrand-500 to-emerald-600 bg-clip-text text-transparent">Jurnal Harian Interaktif</span>
+                </h1>
+
+                <!-- Subheadline -->
+                <p class="fade-in-entry fade-delay-2 text-lg sm:text-xl text-slate-600 leading-relaxed font-normal mb-10 max-w-2xl mx-auto">
+                    Nurture membantu kamu mencatat mood, pola tidur, nutrisi, dan aktivitas harian secara sederhana. Bangun kebiasaan sehat tanpa merasa terbebani.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="fade-in-entry fade-delay-3 flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
+                    <button @click="openAuthModal('register')" class="btn-shimmer w-full sm:w-auto px-8 py-4 text-base font-display font-bold text-white bg-gradient-to-r from-brand-600 via-brand-500 to-tealbrand-500 rounded-2xl shadow-xl shadow-brand-500/25 hover:shadow-2xl hover:shadow-brand-500/40 hover:-translate-y-1 active:translate-y-0 transition-all flex items-center justify-center gap-3">
+                        <span>Coba Gratis 14 Hari</span>
+                        <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                    <a href="#demo" class="w-full sm:w-auto px-8 py-4 text-base font-display font-semibold text-slate-700 bg-white/90 backdrop-blur border border-slate-200 rounded-2xl hover:bg-white hover:border-slate-300 hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 shadow-sm group">
+                        <i class="fa-solid fa-circle-play text-brand-600 group-hover:scale-110 transition-transform"></i>
+                        <span>Coba Demo Langsung</span>
+                    </a>
+                </div>
+
+                <!-- Social Proof Stats with Cards -->
+                <div class="pt-8 border-t border-slate-200/70 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 max-w-2xl mx-auto text-left">
+                    <div class="p-3.5 rounded-2xl glass-card card-interactive flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-brand-100/80 flex items-center justify-center text-brand-700 font-bold text-base shrink-0">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div>
+                            <div class="font-display font-extrabold text-slate-900 text-xl tracking-tight">50,000+</div>
+                            <div class="text-[11px] text-slate-500 font-medium">Pengguna Aktif</div>
+                        </div>
+                    </div>
+                    <div class="p-3.5 rounded-2xl glass-card card-interactive flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-teal-100/80 flex items-center justify-center text-teal-700 font-bold text-base shrink-0">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div>
+                            <div class="font-display font-extrabold text-slate-900 text-xl tracking-tight">4.9 / 5.0</div>
+                            <div class="text-[11px] text-slate-500 font-medium">Rating Komunitas</div>
+                        </div>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1 p-3.5 rounded-2xl glass-card card-interactive flex items-center justify-center sm:justify-start gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-emerald-100/80 flex items-center justify-center text-emerald-700 font-bold text-base shrink-0">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                        <div>
+                            <div class="font-display font-extrabold text-slate-900 text-xl tracking-tight">92%</div>
+                            <div class="text-[11px] text-slate-500 font-medium">Merasa Lebih Sehat</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="py-20 bg-slate-950 text-white relative overflow-hidden">
+        <!-- Ambient Deep Glows in Dark Background -->
+        <div class="absolute -top-24 left-1/4 w-96 h-96 bg-brand-500/15 rounded-full blur-[100px] pointer-events-none animate-float-slow"></div>
+        <div class="absolute -bottom-24 right-1/4 w-96 h-96 bg-tealbrand-500/15 rounded-full blur-[100px] pointer-events-none animate-float-reverse"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-bold uppercase tracking-widest mb-3">
+                    <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
+                    Interactive Playground
+                </span>
+                <h2 class="font-display font-black text-3xl sm:text-5xl mt-2 text-white tracking-tight">Rasakan Sensasi Mencatat di Nurture</h2>
+                <p class="text-slate-400 mt-4 text-sm sm:text-base leading-relaxed">
+                    Cobalah widget jurnal interaktif di bawah ini. Ubah status mood, air minum, atau tambahkan refleksi hari ini secara realtime!
+                </p>
+            </div>
+
+            <!-- Demo App UI Card with Specular Rim Highlight -->
+            <div class="max-w-4xl mx-auto bg-slate-900/90 rounded-3xl border border-slate-700/80 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden backdrop-blur-2xl transition-all duration-300 hover:border-slate-600">
+                <!-- App Header Bar -->
+                <div class="px-6 py-4 border-b border-slate-800 bg-slate-900/80 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-rose-500/90 shadow-sm shadow-rose-500/30"></span>
+                        <span class="w-3 h-3 rounded-full bg-amber-500/90 shadow-sm shadow-amber-500/30"></span>
+                        <span class="w-3 h-3 rounded-full bg-emerald-500/90 shadow-sm shadow-emerald-500/30"></span>
+                        <span class="ml-4 text-xs font-medium text-slate-400">Jurnal Hari Ini &bull; Hari ini, 10:00 AM</span>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-400 bg-brand-500/15 px-3.5 py-1 rounded-full border border-brand-500/25">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-400"></span>
+                        </span>
+                        Live Preview Mode
+                    </span>
+                </div>
+
+                <!-- Interactive App Body Grid -->
+                <div class="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Left Column: Quick Entry Widgets -->
+                    <div class="space-y-6">
+                        <!-- Mood Selector with modern bounce buttons -->
+                        <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Bagaimana Mood Kamu?</label>
+                            <div class="grid grid-cols-5 gap-2">
+                                <template x-for="(m, idx) in demoMoods" :key="idx">
+                                    <button @click="selectedDemoMood = m.label" 
+                                            :class="selectedDemoMood === m.label ? 'bg-gradient-to-tr from-brand-600 to-tealbrand-500 text-white scale-105 border-brand-400/80 shadow-lg shadow-brand-500/30' : 'bg-slate-800/80 text-slate-300 hover:bg-slate-750 border-slate-700/60 hover:scale-102'"
+                                            class="p-2.5 rounded-xl border flex flex-col items-center justify-center transition-all duration-200 text-xl cursor-pointer">
+                                        <span class="transition-transform duration-200 hover:scale-110" x-text="m.emoji"></span>
+                                        <span class="text-[9px] mt-1 font-semibold" x-text="m.label"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Water Intake Tracker -->
+                        <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Konsumsi Air Minum</label>
+                                <span class="text-xs font-display font-bold text-sky-400" x-text="`${waterGlasses * 250} ml / 2000 ml`"></span>
+                            </div>
+                            <!-- Hydration Progress Bar -->
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mb-3">
+                                <div class="bg-gradient-to-r from-sky-500 to-tealbrand-400 h-full rounded-full transition-all duration-300" :style="`width: ${(waterGlasses / 8) * 100}%`"></div>
+                            </div>
+                            <div class="flex items-center gap-1.5 mb-3">
+                                <template x-for="n in 8" :key="n">
+                                    <button @click="waterGlasses = n" class="flex-1 h-9 rounded-xl transition-all duration-200 flex items-center justify-center text-xs cursor-pointer hover:scale-105"
+                                            :class="n <= waterGlasses ? 'bg-gradient-to-b from-sky-400 to-sky-600 text-white shadow-md shadow-sky-500/25 border border-sky-300/40' : 'bg-slate-800/80 text-slate-600 border border-slate-700/40 hover:text-slate-400'">
+                                        <i class="fa-solid fa-droplet text-[11px]"></i>
+                                    </button>
+                                </template>
+                            </div>
+                            <p class="text-[11px] text-slate-400 italic" x-text="waterGlasses >= 8 ? '🎉 Luar biasa! Target hidrasi harian 2 liter tercapai sempurna.' : 'Klik gelas di atas untuk menambah catatamu.'"></p>
+                        </div>
+
+                        <!-- Sleep & Activity Quick Stat -->
+                        <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-slate-400 block font-medium">Kualitas Tidur Semalam</span>
+                                <span class="font-display text-lg font-extrabold text-purple-300">7.5 Jam <span class="text-xs font-normal text-purple-400/90">(Nyenyak)</span></span>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center text-lg shadow-sm shadow-purple-500/20">
+                                <i class="fa-solid fa-moon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Journal Text & Live Output AI Summary -->
+                    <div class="lg:col-span-2 space-y-6 flex flex-col justify-between">
+                        <!-- Text Area Reflection -->
+                        <div class="bg-slate-950/60 p-5 rounded-2xl border border-slate-800/80 flex-1 flex flex-col">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex justify-between items-center">
+                                <span>Refleksi &amp; Catatan Pikiran</span>
+                                <span class="text-[10px] text-emerald-400 flex items-center gap-1 font-semibold">
+                                    <i class="fa-solid fa-cloud-arrow-up text-[9px]"></i> Otomatis Tersimpan
+                                </span>
+                            </label>
+                            <textarea x-model="demoNoteText" 
+                                      rows="4" 
+                                      class="w-full bg-slate-800/70 border border-slate-700/80 rounded-xl p-3.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all resize-none flex-1 font-sans"
+                                      placeholder="Tuliskan apa yang kamu rasakan hari ini, rasa syukur, atau pencapaian kecilmu..."></textarea>
+                        </div>
+
+                        <!-- AI Insight Live Generator Box with Glowing Accent -->
+                        <div class="bg-gradient-to-r from-brand-950/60 via-slate-900 to-tealbrand-950/60 border border-brand-500/40 p-4 rounded-2xl relative shadow-lg shadow-brand-500/5">
+                            <div class="flex items-start gap-3.5">
+                                <div class="w-9 h-9 rounded-xl bg-brand-500/20 border border-brand-500/40 text-brand-400 flex items-center justify-center shrink-0 mt-0.5 animate-subtle-bob">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+                                </div>
+                                <div class="text-xs">
+                                    <span class="font-display font-bold text-brand-300 block mb-1 text-sm tracking-tight">Nurture AI Assistant Analysis</span>
+                                    <p class="text-slate-300 leading-relaxed font-sans" x-text="generateAIInsight()"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Bar -->
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="text-xs text-slate-400 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span>Status: <span class="text-emerald-400 font-semibold">Terhubung dengan Nurture Sync</span></span>
+                            </span>
+                            <button @click="showToast('Catatan demo berhasil disimpan!')" class="btn-shimmer px-6 py-2.5 bg-gradient-to-r from-brand-600 to-tealbrand-500 hover:shadow-lg hover:shadow-brand-500/30 text-white font-bold text-xs rounded-xl active:scale-95 transition-all cursor-pointer">
+                                Simpan Entri Demo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="fitur" class="py-24 bg-slate-50 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-brand-100 text-brand-700 font-bold text-xs uppercase tracking-widest mb-3">
+                    <i class="fa-solid fa-sparkles text-[10px]"></i> Fitur Unggulan
+                </span>
+                <h2 class="font-display font-black text-3xl sm:text-5xl text-slate-900 mt-2 tracking-tight">Semua yang Kamu Butuhkan untuk Hidup Seimbang</h2>
+                <p class="text-slate-600 text-base mt-4 leading-relaxed">Dirancang khusus untuk membantu merawat pikiran, tubuh, dan jiwa dalam satu aplikasi terpadu.</p>
+            </div>
+
+            <!-- Interactive Feature Tabs Navigation with Capsule Design -->
+            <div class="flex justify-center mb-12 overflow-x-auto pb-2 scrollbar-none">
+                <div class="inline-flex bg-slate-200/80 p-1.5 rounded-2xl gap-1.5 shadow-inner">
+                    <template x-for="(tab, index) in featureTabs" :key="index">
+                        <button @click="activeTab = index" 
+                                :class="activeTab === index ? 'bg-white text-slate-900 shadow-md font-bold scale-[1.02]' : 'text-slate-600 hover:text-slate-900 font-semibold'"
+                                class="px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 cursor-pointer">
+                            <i :class="tab.icon"></i>
+                            <span class="font-display" x-text="tab.title"></span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Active Feature Display Box with Modern Glass Styling -->
+            <div class="max-w-5xl mx-auto bg-white/90 backdrop-blur rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl custom-shadow transition-all duration-300">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <div class="inline-flex p-3.5 rounded-2xl mb-4 shadow-sm" :class="featureTabs[activeTab].bgColor">
+                            <i :class="featureTabs[activeTab].icon + ' text-2xl ' + featureTabs[activeTab].textColor"></i>
+                        </div>
+                        <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 mb-3 tracking-tight" x-text="featureTabs[activeTab].heading"></h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6" x-text="featureTabs[activeTab].description"></p>
+                        
+                        <!-- Bullets list -->
+                        <ul class="space-y-3.5 mb-8">
+                            <template x-for="(bullet, bIdx) in featureTabs[activeTab].bullets" :key="bIdx">
+                                <li class="flex items-center gap-3 text-xs sm:text-sm text-slate-700 font-medium">
+                                    <div class="w-5 h-5 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center shrink-0 shadow-xs">
+                                        <i class="fa-solid fa-check text-[10px]"></i>
+                                    </div>
+                                    <span x-text="bullet"></span>
+                                </li>
+                            </template>
+                        </ul>
+
+                        <button @click="openAuthModal('register')" class="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-display font-bold transition-all shadow-md hover:-translate-y-0.5 cursor-pointer">
+                            Jelajahi Fitur Ini &rarr;
+                        </button>
+                    </div>
+
+                    <!-- Visual Card Mockup with Animated Elements -->
+                    <div class="bg-gradient-to-tr from-slate-100 to-slate-50 rounded-2xl p-6 border border-slate-200/80 relative overflow-hidden flex items-center justify-center min-h-[300px]">
+                        <div class="text-center p-6 bg-white/95 rounded-2xl border border-slate-200/70 shadow-lg w-full card-interactive">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-slate-50 flex items-center justify-center shadow-inner">
+                                <i :class="featureTabs[activeTab].icon + ' text-3xl ' + featureTabs[activeTab].textColor + ' animate-subtle-bob'"></i>
+                            </div>
+                            <h4 class="font-display font-bold text-slate-800 text-lg mb-1" x-text="featureTabs[activeTab].title"></h4>
+                            <p class="text-xs text-slate-500 mb-4">Laporan real-time dipersonalisasi sesuai kebutuhanmu.</p>
+                            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden p-0.5 shadow-inner">
+                                <div class="bg-gradient-to-r from-brand-500 via-tealbrand-500 to-emerald-400 h-full w-3/4 rounded-full animate-pulse"></div>
+                            </div>
+                            <span class="text-[10px] text-brand-600 font-semibold mt-2.5 block flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-circle-check text-[9px]"></i> Akurasi Rekomendasi 98.4%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3 Pillars Benefit Grid -->
+    <section class="py-20 bg-white border-y border-slate-200/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                <div class="p-8 rounded-3xl bg-brand-50/40 border border-brand-100/80 card-interactive">
+                    <div class="w-14 h-14 bg-brand-100 text-brand-700 rounded-2xl flex items-center justify-center text-2xl mb-5 mx-auto md:mx-0 shadow-sm">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h4 class="font-display font-bold text-slate-900 text-xl mb-2.5">Mengurangi Stres &amp; Kecemasan</h4>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                        Menuangkan pikiran dalam bentuk tulisan harian membantu menurunkan tingkat cortisol hingga 23% berdasarkan studi psikologi modern.
+                    </p>
+                </div>
+
+                <div class="p-8 rounded-3xl bg-teal-50/40 border border-teal-100/80 card-interactive">
+                    <div class="w-14 h-14 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl mb-5 mx-auto md:mx-0 shadow-sm">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h4 class="font-display font-bold text-slate-900 text-xl mb-2.5">Konsistensi Kebiasaan Sehat</h4>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                        Penguncian target mikro harian memudahkan pembentukan kebiasaan baru seperti minum air dan olahraga ringan tanpa terasa berat.
+                    </p>
+                </div>
+
+                <div class="p-8 rounded-3xl bg-sky-50/40 border border-sky-100/80 card-interactive">
+                    <div class="w-14 h-14 bg-sky-100 text-sky-700 rounded-2xl flex items-center justify-center text-2xl mb-5 mx-auto md:mx-0 shadow-sm">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h4 class="font-display font-bold text-slate-900 text-xl mb-2.5">Privasi Terenkripsi Lengkap</h4>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                        Catatan pribadi dan data kesehatanmu dienkripsi end-to-end. Hanya kamu yang memiliki akses penuh terhadap data jurnalmu.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wellness Interactive Calculator -->
+    <section id="kalkulator" class="py-24 bg-slate-50 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 rounded-3xl p-6 sm:p-12 text-white shadow-2xl relative overflow-hidden border border-slate-800">
+                <!-- Ambient Glow Behind Quiz -->
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="text-center max-w-xl mx-auto mb-10">
+                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-brand-500/15 border border-brand-500/25 text-brand-400 text-xs font-bold uppercase tracking-widest mb-3">
+                        <i class="fa-solid fa-calculator text-[10px]"></i> Kalkulator Kesejahteraan
+                    </span>
+                    <h2 class="font-display font-black text-2xl sm:text-4xl mt-1 tracking-tight">Berapa Skor Kesejahteraan Dirimu?</h2>
+                    <p class="text-slate-400 text-xs sm:text-sm mt-3 leading-relaxed">Jawab 3 pertanyaan singkat ini untuk mendapatkan evaluasi awal kesehatan mental &amp; fisikmu.</p>
+                </div>
+
+                <!-- Quiz Container -->
+                <div x-show="quizStep <= 3" class="space-y-6">
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden p-0.5">
+                        <div class="bg-gradient-to-r from-brand-500 to-tealbrand-400 h-full rounded-full transition-all duration-500 shadow-sm shadow-brand-500/50" :style="`width: ${(quizStep / 3) * 100}%`"></div>
+                    </div>
+
+                    <!-- Step 1 -->
+                    <div x-show="quizStep === 1" class="space-y-4">
+                        <h4 class="font-display font-semibold text-slate-200 text-lg">1. Berapa jam rata-rata kamu tidur setiap malam?</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                            <button @click="selectQuizScore(1, 1)" class="p-4 bg-slate-850 hover:bg-slate-800 border border-slate-700/80 hover:border-brand-500/60 rounded-2xl text-xs sm:text-sm text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer flex items-center justify-between">
+                                <span>Kurang dari 6 jam</span>
+                                <i class="fa-solid fa-arrow-right text-slate-500 text-[10px]"></i>
+                            </button>
+                            <button @click="selectQuizScore(1, 2)" class="p-4 bg-slate-850 hover:bg-slate-800 border border-slate-700/80 hover:border-brand-500/60 rounded-2xl text-xs sm:text-sm text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer flex items-center justify-between">
+                                <span>6 - 7 jam</span>
+                                <i class="fa-solid fa-arrow-right text-slate-500 text-[10px]"></i>
+                            </button>
+                            <button @click="selectQuizScore(1, 3)" class="p-4 bg-slate-850 hover:bg-slate-800 border border-slate-700/80 hover:border-brand-500/60 rounded-2xl text-xs sm:text-sm text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer flex items-center justify-between">
+                                <span class="font-semibold text-brand-300">7 - 9 jam (Ideal)</span>
+                                <i class="fa-solid fa-check text-brand-400 text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div x-show="quizStep === 2" class="space-y-4">
+                        <h4 class="font-display font-semibold text-slate-200 text-lg">2. Seberapa sering kamu merasa cemas atau kelelahan?</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                            <button @click="selectQuizScore(2, 1)" class="p-4 bg-slate-850 hover:bg-slate-800 border border-slate-700/80 hover:border-brand-500/60 rounded-2xl text-xs sm:text-sm text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer flex items-center justify-between">
+                                <span>Hampir Setiap Hari</span>
+                                <i class="fa-solid fa-arrow-right text-slate-500 text-[10px]"></i>
+                            </button>
+                            <button @click="selectQuizScore(2, 2)" class="p-4 bg-slate-850 hover:bg-slate-800 border border-slate-700/80 hover:border-brand-500/60 rounded-2xl text-xs sm:text-sm text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer flex items-center justify-between">
+                                <span>Kadang-kadang</span>
+                                <i class="fa-solid fa-arrow-right text-slate-500 text-[10px]"></i>
+                            </button>
+                            <button @click="selectQuizScore(2, 3)" class="p-4 bg-slate-850 hover:bg-slate-800 border border-slate-700/80 hover:border-brand-500/60 rounded-2xl text-xs sm:text-sm text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer flex items-center justify-between">
+                                <span class="font-semibold text-brand-300">Jarang Sekali</span>
+                                <i class="fa-solid fa-check text-brand-400 text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div x-show="quizStep === 3" class="space-y-4">
+                        <h4 class="font-display font-semibold text-slate-200 text-lg">3. Berapa rutin kamu mencatat progres kesehatanmu?</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                            <button @click="selectQuizScore(3, 1)" class="p-4 bg-slate-850 hover:bg-slate-800 border border-slate-700/80 hover:border-brand-500/60 rounded-2xl text-xs sm:text-sm text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer flex items-center justify-between">
+                                <span>Tidak Pernah</span>
+                                <i class="fa-solid fa-arrow-right text-slate-500 text-[10px]"></i>
+                            </button>
+                            <button @click="selectQuizScore(3, 2)" class="p-4 bg-slate-850 hover:bg-slate-800 border border-slate-700/80 hover:border-brand-500/60 rounded-2xl text-xs sm:text-sm text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer flex items-center justify-between">
+                                <span>Kadang Jika Ingat</span>
+                                <i class="fa-solid fa-arrow-right text-slate-500 text-[10px]"></i>
+                            </button>
+                            <button @click="selectQuizScore(3, 3)" class="p-4 bg-slate-850 hover:bg-slate-800 border border-slate-700/80 hover:border-brand-500/60 rounded-2xl text-xs sm:text-sm text-left transition-all hover:scale-[1.02] active:scale-95 cursor-pointer flex items-center justify-between">
+                                <span class="font-semibold text-brand-300">Setiap Hari</span>
+                                <i class="fa-solid fa-check text-brand-400 text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Result -->
+                <div x-show="quizStep > 3" class="text-center py-6 space-y-5">
+                    <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-tr from-brand-500/20 to-tealbrand-500/20 text-brand-400 font-display text-4xl font-black border-2 border-brand-500/40 shadow-xl shadow-brand-500/20 animate-subtle-bob">
+                        <span x-text="calculateQuizScore() + '%'"></span>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-white">Hasil Analisis Singkat Kamu</h3>
+                    <p class="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed" x-text="getQuizFeedback()"></p>
+                    <div class="pt-4 flex justify-center gap-3">
+                        <button @click="quizStep = 1; quizAnswers = []" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold transition-all cursor-pointer">
+                            Ulangi Kuis
+                        </button>
+                        <button @click="openAuthModal('register')" class="btn-shimmer px-6 py-2.5 bg-gradient-to-r from-brand-500 to-tealbrand-500 hover:shadow-lg hover:shadow-brand-500/30 text-white rounded-xl text-xs font-bold transition-all cursor-pointer">
+                            Mulai Perbaiki Rutinitas
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-brand-100 text-brand-700 font-bold text-xs uppercase tracking-widest mb-3">
+                    <i class="fa-solid fa-heart text-[10px]"></i> Kisah Sukses Pengguna
+                </span>
+                <h2 class="font-display font-black text-3xl sm:text-5xl text-slate-900 mt-2 tracking-tight">Dipercaya oleh Ribuan Individu Sehat</h2>
+                <p class="text-slate-600 text-sm mt-3">Dengarkan bagaimana Nurture membantu memperbaiki ritme hidup sehari-hari mereka.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="p-8 rounded-3xl bg-slate-50/70 border border-slate-200/80 flex flex-col justify-between card-interactive">
+                    <div>
+                        <div class="flex text-amber-400 text-xs mb-4 gap-1">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-slate-700 text-xs sm:text-sm leading-relaxed italic mb-8">
+                            "Awalnya saya susah konsisten minum air dan selalu stres saat kerja. Sejak pakai Nurture, fitur refleksi AI-nya memberi saran yang sangat pas!"
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3.5 pt-4 border-t border-slate-200/60">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="User Avatar" class="w-11 h-11 rounded-full object-cover ring-2 ring-brand-500/30">
+                        <div>
+                            <h5 class="font-display font-bold text-slate-900 text-sm">Amanda S.</h5>
+                            <span class="text-[11px] text-slate-500">UX Designer, Jakarta</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="p-8 rounded-3xl bg-slate-50/70 border border-slate-200/80 flex flex-col justify-between card-interactive">
+                    <div>
+                        <div class="flex text-amber-400 text-xs mb-4 gap-1">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-slate-700 text-xs sm:text-sm leading-relaxed italic mb-8">
+                            "Jurnal kesehatan terbaik yang simpel dan estetik. Grafik pola tidurnya membantu banget buat dokter saya memahami kondisi saya."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3.5 pt-4 border-t border-slate-200/60">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="User Avatar" class="w-11 h-11 rounded-full object-cover ring-2 ring-tealbrand-500/30">
+                        <div>
+                            <h5 class="font-display font-bold text-slate-900 text-sm">Budi Pratama</h5>
+                            <span class="text-[11px] text-slate-500">Software Engineer, Bandung</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="p-8 rounded-3xl bg-slate-50/70 border border-slate-200/80 flex flex-col justify-between card-interactive">
+                    <div>
+                        <div class="flex text-amber-400 text-xs mb-4 gap-1">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-slate-700 text-xs sm:text-sm leading-relaxed italic mb-8">
+                            "Desainnya tenang dan nggak bikin pusing. Pengingat jurnalnya halus dan nggak mengganggu. Sangat membantu menjaga mental health."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3.5 pt-4 border-t border-slate-200/60">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="User Avatar" class="w-11 h-11 rounded-full object-cover ring-2 ring-emerald-500/30">
+                        <div>
+                            <h5 class="font-display font-bold text-slate-900 text-sm">Nadia Kirana</h5>
+                            <span class="text-[11px] text-slate-500">Content Creator, Surabaya</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="harga" class="py-24 bg-slate-50 border-t border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-brand-100 text-brand-700 font-bold text-xs uppercase tracking-widest mb-3">
+                    <i class="fa-solid fa-tag text-[10px]"></i> Pilihan Paket
+                </span>
+                <h2 class="font-display font-black text-3xl sm:text-5xl text-slate-900 mt-2 tracking-tight">Investasi Terbaik untuk Dirimu</h2>
+                <p class="text-slate-600 text-sm mt-3">Pilih paket yang paling sesuai dengan target hidup sehatmu.</p>
+
+                <!-- Billing Toggle Switch with Spring Feel -->
+                <div class="mt-8 flex items-center justify-center gap-3">
+                    <span class="text-xs font-bold" :class="!isYearly ? 'text-slate-900' : 'text-slate-500'">Bulanan</span>
+                    <button @click="isYearly = !isYearly" class="w-14 h-7 bg-slate-300 rounded-full p-1 transition-colors relative cursor-pointer" :class="isYearly ? 'bg-brand-600' : 'bg-slate-300'">
+                        <div class="w-5 h-5 bg-white rounded-full transition-transform shadow-md" :class="isYearly ? 'translate-x-7' : 'translate-x-0'"></div>
+                    </button>
+                    <span class="text-xs font-bold flex items-center gap-1.5" :class="isYearly ? 'text-slate-900' : 'text-slate-500'">
+                        Tahunan 
+                        <span class="bg-emerald-100 text-brand-700 text-[10px] px-2.5 py-0.5 rounded-full font-extrabold shadow-xs">Hemat 20%</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Pricing Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto items-stretch">
+                <!-- Free Plan -->
+                <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm flex flex-col justify-between card-interactive">
+                    <div>
+                        <h4 class="font-display font-bold text-slate-800 text-xl mb-1">Starter Free</h4>
+                        <p class="text-xs text-slate-500 mb-6">Untuk pemula yang ingin mulai mencatat kebiasaan.</p>
+                        <div class="font-display text-4xl font-black text-slate-900 mb-6 tracking-tight">
+                            Rp 0 <span class="text-xs font-normal text-slate-500">/ selamanya</span>
+                        </div>
+                        <ul class="space-y-3.5 text-xs text-slate-600 mb-8">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-600"></i> Jurnal Mood &amp; Hidrasi Harian</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-600"></i> Riwayat Catatan 7 Hari</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-600"></i> Statistik Dasar Tidur</li>
+                            <li class="flex items-center gap-2.5 text-slate-400"><i class="fa-solid fa-xmark"></i> Fitur Rekomendasi AI</li>
+                        </ul>
+                    </div>
+                    <button @click="openAuthModal('register')" class="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-display font-bold rounded-xl transition-all cursor-pointer">
+                        Daftar Gratis
+                    </button>
+                </div>
+
+                <!-- Pro Plan (Popular) -->
+                <div class="bg-slate-900 text-white rounded-3xl p-8 border-2 border-brand-500 glow-effect relative flex flex-col justify-between transform md:-translate-y-3 card-interactive">
+                    <span class="btn-shimmer absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-brand-500 to-tealbrand-500 text-white text-[10px] font-extrabold uppercase px-3.5 py-1 rounded-full shadow-lg">
+                        Paling Populer
+                    </span>
+                    <div>
+                        <h4 class="font-display font-bold text-white text-xl mb-1">Pro Personal</h4>
+                        <p class="text-xs text-slate-400 mb-6">Akses lengkap seluruh fitur AI &amp; analitik mendalam.</p>
+                        <div class="font-display text-4xl font-black text-white mb-6 tracking-tight">
+                            <span x-text="isYearly ? 'Rp 39.000' : 'Rp 49.000'"></span> 
+                            <span class="text-xs font-normal text-slate-400">/ bulan</span>
+                        </div>
+                        <ul class="space-y-3.5 text-xs text-slate-300 mb-8">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-400"></i> Semua Fitur Starter Free</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-400"></i> Riwayat Jurnal Tanpa Batas</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-400"></i> Nurture AI Insights &amp; Prompting</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-400"></i> Ekspor PDF &amp; Laporan Kesehatan</li>
+                        </ul>
+                    </div>
+                    <button @click="openAuthModal('register')" class="btn-shimmer w-full py-3.5 bg-gradient-to-r from-brand-500 via-brand-600 to-tealbrand-500 hover:shadow-xl hover:shadow-brand-500/30 text-white text-xs font-display font-bold rounded-xl transition-all cursor-pointer">
+                        Mulai 14 Hari Uji Coba Gratis
+                    </button>
+                </div>
+
+                <!-- Family / Team Plan -->
+                <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm flex flex-col justify-between card-interactive">
+                    <div>
+                        <h4 class="font-display font-bold text-slate-800 text-xl mb-1">Family &amp; Friends</h4>
+                        <p class="text-xs text-slate-500 mb-6">Untuk hingga 5 akun anggota keluarga atau teman.</p>
+                        <div class="font-display text-4xl font-black text-slate-900 mb-6 tracking-tight">
+                            <span x-text="isYearly ? 'Rp 99.000' : 'Rp 129.000'"></span> 
+                            <span class="text-xs font-normal text-slate-500">/ bulan</span>
+                        </div>
+                        <ul class="space-y-3.5 text-xs text-slate-600 mb-8">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-600"></i> 5 Akun Premium Pro Terpisah</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-600"></i> Fitur Group Habit Challenge</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-600"></i> Prioritas Dukungan Pelanggan</li>
+                        </ul>
+                    </div>
+                    <button @click="openAuthModal('register')" class="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-display font-bold rounded-xl transition-all cursor-pointer">
+                        Pilih Paket Keluarga
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14">
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-brand-100 text-brand-700 font-bold text-xs uppercase tracking-widest mb-3">
+                    <i class="fa-solid fa-circle-question text-[10px]"></i> Pertanyaan Umum
+                </span>
+                <h2 class="font-display font-black text-3xl sm:text-5xl text-slate-900 mt-2 tracking-tight">Sering Ditanyakan (FAQ)</h2>
+            </div>
+
+            <div class="space-y-4">
+                <template x-for="(faq, index) in faqs" :key="index">
+                    <div class="border border-slate-200/80 rounded-2xl overflow-hidden transition-all duration-200 hover:border-slate-300">
+                        <button @click="activeFaq = activeFaq === index ? null : index" 
+                                class="w-full p-5 text-left font-display font-bold text-slate-800 text-base flex justify-between items-center hover:bg-slate-50/80 transition-colors cursor-pointer">
+                            <span x-text="faq.question"></span>
+                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0 ml-3">
+                                <i class="fa-solid text-slate-500 transition-transform duration-300 text-xs" :class="activeFaq === index ? 'fa-chevron-up rotate-180 text-brand-600' : 'fa-chevron-down'"></i>
+                            </div>
+                        </button>
+                        <div x-show="activeFaq === index" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0" class="p-6 pt-1 text-slate-600 text-sm border-t border-slate-100 bg-slate-50/50 leading-relaxed font-sans" x-text="faq.answer">
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final High-Impact CTA Banner with Ambient Glows -->
+    <section class="py-24 bg-gradient-to-r from-brand-800 via-brand-700 to-tealbrand-700 text-white relative overflow-hidden">
+        <!-- Floating light orbs inside CTA -->
+        <div class="absolute -top-16 -left-16 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none animate-float-slow"></div>
+        <div class="absolute -bottom-16 -right-16 w-80 h-80 bg-teal-300/10 rounded-full blur-3xl pointer-events-none animate-float-reverse"></div>
+
+        <div class="max-w-5xl mx-auto px-4 text-center relative z-10">
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur border border-white/20 text-brand-100 text-xs font-bold uppercase tracking-widest mb-4">
+                <i class="fa-solid fa-sparkles text-[10px]"></i> Mulai Sekarang
+            </span>
+            <h2 class="font-display font-black text-3xl sm:text-5xl lg:text-6xl mb-6 tracking-tight">Siap Memulai Perjalanan Hidup Sehatmu?</h2>
+            <p class="text-brand-100/90 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+                Bergabunglah dengan ribuan orang yang sudah merasakan kemudahan mengelola fisik dan pikiran bersama Nurture.
+            </p>
+            <button @click="openAuthModal('register')" class="btn-shimmer px-9 py-4 bg-white text-brand-900 font-display font-extrabold text-base rounded-2xl shadow-2xl hover:bg-slate-50 hover:shadow-brand-900/30 hover:-translate-y-1 active:translate-y-0 transition-all inline-flex items-center gap-3 cursor-pointer">
+                <span>Daftar Sekarang - Gratis 14 Hari</span>
+                <i class="fa-solid fa-arrow-right text-sm"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Modern Footer -->
+    <footer class="bg-slate-950 text-slate-400 py-16 border-t border-slate-900 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
+            <div class="col-span-2">
+                <a href="#" class="flex items-center gap-3 mb-4 group">
+                    <div class="w-9 h-9 rounded-xl bg-brand-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-book-journal-whills text-base"></i>
+                    </div>
+                    <span class="font-display font-extrabold text-2xl text-white tracking-tight">Nurture<span class="text-brand-500">.</span></span>
+                </a>
+                <p class="text-slate-400 max-w-sm mb-5 leading-relaxed">
+                    Aplikasi jurnal kesehatan &amp; habit tracker pintar untuk keseimbangan fisik dan mental sehari-hari.
+                </p>
+                <div class="flex gap-3">
+                    <a href="#" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center hover:text-white hover:border-slate-700 hover:scale-105 transition-all text-slate-400"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center hover:text-white hover:border-slate-700 hover:scale-105 transition-all text-slate-400"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center hover:text-white hover:border-slate-700 hover:scale-105 transition-all text-slate-400"><i class="fa-brands fa-tiktok"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h5 class="font-display font-bold text-white mb-4 uppercase tracking-wider text-xs">Navigasi</h5>
+                <ul class="space-y-2.5">
+                    <li><a href="#fitur" class="hover:text-brand-400 transition-colors">Fitur Utama</a></li>
+                    <li><a href="#demo" class="hover:text-brand-400 transition-colors">Journal Demo</a></li>
+                    <li><a href="#harga" class="hover:text-brand-400 transition-colors">Harga Paket</a></li>
+                    <li><a href="#faq" class="hover:text-brand-400 transition-colors">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="font-display font-bold text-white mb-4 uppercase tracking-wider text-xs">Perusahaan</h5>
+                <ul class="space-y-2.5">
+                    <li><a href="#" class="hover:text-brand-400 transition-colors">Tentang Kami</a></li>
+                    <li><a href="#" class="hover:text-brand-400 transition-colors">Karir</a></li>
+                    <li><a href="#" class="hover:text-brand-400 transition-colors">Blog Kesehatan</a></li>
+                    <li><a href="#" class="hover:text-brand-400 transition-colors">Kontak Support</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="font-display font-bold text-white mb-4 uppercase tracking-wider text-xs">Kebijakan</h5>
+                <ul class="space-y-2.5">
+                    <li><a href="#" class="hover:text-brand-400 transition-colors">Privasi Data</a></li>
+                    <li><a href="#" class="hover:text-brand-400 transition-colors">Syarat &amp; Ketentuan</a></li>
+                    <li><a href="#" class="hover:text-brand-400 transition-colors">Keamanan End-to-End</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-900 pt-8 text-center text-slate-500">
+            &copy; 2026 Nurture Healthy Journal. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Registration/Login Modal with Modern Glass Styling -->
+    <div x-show="authModalOpen" x-transition.opacity class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4">
+        <div @click.away="authModalOpen = false" class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-9 shadow-2xl relative border border-slate-100 fade-in-entry">
+            <button @click="authModalOpen = false" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 flex items-center justify-center transition-colors cursor-pointer">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm shadow-brand-500/10">
+                    <i class="fa-solid fa-user-plus" x-show="authMode === 'register'"></i>
+                    <i class="fa-solid fa-right-to-bracket" x-show="authMode === 'login'"></i>
+                </div>
+                <h3 class="font-display font-extrabold text-2xl text-slate-900 tracking-tight" x-text="authMode === 'register' ? 'Buat Akun Nurture' : 'Selamat Datang Kembali'"></h3>
+                <p class="text-xs text-slate-500 mt-1.5" x-text="authMode === 'register' ? 'Mulai uji coba gratis 14 hari kamu sekarang' : 'Masuk untuk mengakses jurnal harianmu'"></p>
+            </div>
+
+            <form @submit.prevent="handleAuthSubmit()" class="space-y-4">
+                <div x-show="authMode === 'register'">
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Nama Lengkap</label>
+                    <input type="text" placeholder="John Doe" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Alamat Email</label>
+                    <input type="email" placeholder="nama@email.com" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Kata Sandi</label>
+                    <input type="password" placeholder="••••••••" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition-all">
+                </div>
+
+                <button type="submit" class="btn-shimmer w-full py-3.5 bg-gradient-to-r from-brand-600 to-tealbrand-500 hover:shadow-xl hover:shadow-brand-500/25 text-white font-display font-bold text-xs rounded-xl transition-all cursor-pointer">
+                    <span x-text="authMode === 'register' ? 'Daftar Sekarang' : 'Masuk Akun'"></span>
+                </button>
+            </form>
+
+            <div class="mt-5 text-center text-xs text-slate-500">
+                <span x-text="authMode === 'register' ? 'Sudah punya akun?' : 'Belum memiliki akun?'"></span>
+                <button @click="authMode = authMode === 'register' ? 'login' : 'register'" class="text-brand-600 font-bold ml-1 hover:underline cursor-pointer">
+                    <span x-text="authMode === 'register' ? 'Masuk di sini' : 'Daftar di sini'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div x-show="toastShow" x-transition class="fixed bottom-6 right-6 z-50 bg-slate-900/95 backdrop-blur-md text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-slate-800 text-xs">
+        <div class="w-7 h-7 rounded-full bg-brand-500 flex items-center justify-center text-white text-xs shadow-md shadow-brand-500/40">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span class="font-medium" x-text="toastMessage"></span>
+    </div>
+
+    <script>
+        function appData() {
+            return {
+                mobileMenuOpen: false,
+                authModalOpen: false,
+                authMode: 'register',
+                toastShow: false,
+                toastMessage: '',
+                isYearly: true,
+
+                // Demo Interactive Journal State
+                selectedDemoMood: 'Senang',
+                waterGlasses: 5,
+                demoNoteText: 'Hari ini merasa cukup produktif, jalan pagi 20 menit dan minum air teratur.',
+                demoMoods: [
+                    { emoji: '😊', label: 'Senang' },
+                    { emoji: '😌', label: 'Tenang' },
+                    { emoji: '😐', label: 'Biasa' },
+                    { emoji: '😫', label: 'Lelah' },
+                    { emoji: '😔', label: 'Sedih' }
+                ],
+
+                // Features Tabs Data
+                activeTab: 0,
+                featureTabs: [
+                    {
+                        title: 'Mental & Mood',
+                        heading: 'Pelacak Pikiran & Suasana Hati',
+                        description: 'Catat naik turunnya emosimu setiap hari. Dapatkan analisis pola pemicu stres dan saran meditasi terpandu.',
+                        icon: 'fa-solid fa-face-smile',
+                        bgColor: 'bg-emerald-100',
+                        textColor: 'text-emerald-600',
+                        bullets: [
+                            'Pengenal pola emosi mingguan',
+                            'Latihan pernapasan cepat 3 menit',
+                            'Fitur pengunci jurnal rahasia PIN/Biometrik'
+                        ]
+                    },
+                    {
+                        title: 'Nutrisi & Hidrasi',
+                        heading: 'Monitoring Makanan & Air Minum',
+                        description: 'Kelola asupan nutrisi harian dengan mudah. Pengingat minum air pintar yang menyesuaikan suhu lingkunganmu.',
+                        icon: 'fa-solid fa-apple-whole',
+                        bgColor: 'bg-teal-100',
+                        textColor: 'text-teal-600',
+                        bullets: [
+                            'Target air minum berdasarkan berat badan',
+                            'Pencatatan makanan kilat tanpa rumit',
+                            'Grafik kecukupan vitamin & nutrisi'
+                        ]
+                    },
+                    {
+                        title: 'Kualitas Tidur',
+                        heading: 'Pelacak Tidur & Pemulihan Body',
+                        description: 'Pahami siklus tidurmu dan bangun dengan tubuh lebih segar berkat panduan waktu tidur optimal.',
+                        icon: 'fa-solid fa-moon',
+                        bgColor: 'bg-purple-100',
+                        textColor: 'text-purple-600',
+                        bullets: [
+                            'Siklus REM & analisis ketenangan tidur',
+                            'Audio pengantar tidur (White noise)',
+                            'Korelasi tidur dengan mood esok hari'
+                        ]
+                    },
+                    {
+                        title: 'AI Insights',
+                        heading: 'Analisis AI & Rekomendasi Pintar',
+                        description: 'Asisten kesehatan pribadi yang membaca tren jurnalmu dan memberikan rangkuman kesehatan mingguan.',
+                        icon: 'fa-solid fa-brain',
+                        bgColor: 'bg-amber-100',
+                        textColor: 'text-amber-600',
+                        bullets: [
+                            'Laporan ringkasan kesehatan otomatis',
+                            'Saran aktivitas harian kontekstual',
+                            'Deteksi dini kelelahan mental (Burnout)'
+                        ]
+                    }
+                ],
+
+                // Wellness Quiz State
+                quizStep: 1,
+                quizAnswers: [],
+                selectQuizScore(step, val) {
+                    this.quizAnswers.push(val);
+                    this.quizStep++;
+                },
+                calculateQuizScore() {
+                    if (this.quizAnswers.length === 0) return 0;
+                    const total = this.quizAnswers.reduce((a, b) => a + b, 0);
+                    return Math.round((total / 9) * 100);
+                },
+                getQuizFeedback() {
+                    const score = this.calculateQuizScore();
+                    if (score >= 80) return "Kondisi kesejahteraanmu sangat prima! Pertahankan pola tidur dan rutinitas positifmu.";
+                    if (score >= 50) return "Kondisimu cukup baik, namun ada ruang untuk perbaikan pada manajemen pola tidur & tingkat stres.";
+                    return "Tingkat stresmu cukup tinggi dan butuh perhatian lebih. Mencatat jurnal harian di Nurture bisa membantumu kembali seimbang.";
+                },
+
+                // FAQ Data
+                activeFaq: 0,
+                faqs: [
+                    {
+                        question: 'Apakah data jurnal saya aman dan pribadi?',
+                        answer: 'Ya, seluruh data jurnal, catatan mood, dan statistik pribadi dienkripsi dengan standar keamanan tinggi. Kami tidak menjual data pengguna kepada pihak manapun.'
+                    },
+                    {
+                        question: 'Apakah bisa digunakan secara gratis?',
+                        answer: 'Tentu! Paket Starter Free memungkinkan kamu mencatat mood, hidrasi, dan refleksi harian tanpa batas waktu secara gratis.'
+                    },
+                    {
+                        question: 'Bagaimana cara kerja AI Insights di Nurture?',
+                        answer: 'Fitur AI menganalisis pola dari catatan jurnalmu (seperti hubungan antara durasi tidur dan tingkat mood) untuk memberikan saran rutinitas yang terpersonalisasi.'
+                    },
+                    {
+                        question: 'Dapatkah saya mengunduh data jurnal saya?',
+                        answer: 'Ya, pengguna paket Pro dapat mengunduh seluruh riwayat jurnal dan laporan kesehatan harian dalam format PDF atau CSV kapan saja.'
+                    }
+                ],
+
+                // Methods
+                generateAIInsight() {
+                    return `Berdasarkan mood "${this.selectedDemoMood}" dan hidrasi ${this.waterGlasses * 250}ml hari ini, energi Anda berada di tingkat optimal. Pertahankan konsistensi ini!`;
+                },
+                openAuthModal(mode) {
+                    this.authMode = mode;
+                    this.authModalOpen = true;
+                },
+                handleAuthSubmit() {
+                    this.authModalOpen = false;
+                    this.showToast(this.authMode === 'register' ? 'Pendaftaran berhasil! Selamat datang di Nurture.' : 'Berhasil masuk ke akun Anda.');
+                },
+                showToast(msg) {
+                    this.toastMessage = msg;
+                    this.toastShow = true;
+                    setTimeout(() => {
+                        this.toastShow = false;
+                    }, 3500);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
